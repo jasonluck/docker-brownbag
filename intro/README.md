@@ -1,4 +1,4 @@
-# Intro to Docker
+# Docker Brownbag - Intro to Docker
 ![Docker Logo](https://www.docker.com/sites/default/files/moby.svg)
 
 ## What is Docker?
@@ -74,6 +74,9 @@ For a more complex example we can look at this [Dockerfile](https://github.com/j
 ## Important Things to Know About Images
 * Data stored in containers is removed when the container is removed. If you want the data in the container
 to persist past the life of the container, you need to make sure the data is stored in a [Volume](https://docs.docker.com/engine/tutorials/dockervolumes/).
+* The exchange of secrets in a completely secure manner is a real challenge right now. Usually secrets are set as ENV variables
+within the container, which isn't completely secure. A secrets management tool, such as [Vault](https://www.vaultproject.io) is needed to completely
+secure secret data.
 
 ## Additional Resources
 * [Brown Bag Presentation - https://github.com/jasonluck/docker-brownbag](https://github.com/jasonluck/docker-brownbag)
