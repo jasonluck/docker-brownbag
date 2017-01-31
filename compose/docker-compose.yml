@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+    app-db:
+        image: mysql
+        environment: 
+            MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+            MYSQL_DB: app
+            MYSQL_USER: app-user
+            MYSQL_PASSWORD: app-password
+        networks:
+            - backend
+
+    app-db-schema:
+        build:
+            context: ./db
+        image: dockerbrownbag-schema
+        environment:
+            DB_DATABASE: app 
+            DB_USER: app-user
+            DB_PASSWORD: app-password
+        depends_on:
+            - app-db
+        networks:
+            - backend
+
+networks:
+    backend:
+        driver: bridge
+
+

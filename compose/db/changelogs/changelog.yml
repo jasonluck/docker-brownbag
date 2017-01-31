@@ -1,0 +1,20 @@
+databaseChangeLog:
+    changeSet:
+        id: registry-table
+        author: jluck
+        changes:
+        - createTable:
+            tableName: registry
+            columns:
+            - column:
+                name: uuid
+                type: uuid
+            - column:
+                name: date
+                type: datetime
+            - column:
+                name: first_name
+                type: varchar(255)
+            - column:
+                name: last_name
+                type: varchar(255)
