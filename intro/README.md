@@ -69,6 +69,12 @@ build this image with the following command: `docker build -t custom-nginx .`
 
 We can start our new container with: `docker run -d -p 80:80 custom-nginx`
 
+For a more complex example we can look at this [Dockerfile](https://github.com/jasonluck/hybris-docker/blob/master/Dockerfile) I created for Hybris
+
+## Important Things to Know About Images
+* Data stored in containers is removed when the container is removed. If you want the data in the container
+to persist past the life of the container, you need to make sure the data is stored in a [Volume](https://docs.docker.com/engine/tutorials/dockervolumes/).
+
 ## Additional Resources
 * [Brown Bag Presentation - https://github.com/jasonluck/docker-brownbag](https://github.com/jasonluck/docker-brownbag)
 * [Docker Documentation - https://docs.docker.com/](https://docs.docker.com/)
