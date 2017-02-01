@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+    app-db:
+        environment: 
+            MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+            MYSQL_DATABASE: 'app'
+            MYSQL_USER: 'appuser'
+            MYSQL_PASSWORD: 'apppassword'
+
+    app-db-schema:
+        build:
+            context: ./db
+        environment:
+            DB_DATABASE: 'app' 
+            DB_USER: 'appuser'
+            DB_PASSWORD: 'apppassword'
+
+
