@@ -16,4 +16,13 @@ services:
             DB_USER: 'appuser'
             DB_PASSWORD: 'apppassword'
 
+    rest-services:
+        build:
+            context: ./services
+        environment:
+            DB_DATABASE: 'app' 
+            DB_USER: 'appuser'
+            DB_PASSWORD: 'apppassword'
+            DB_HOST: 'app-db'
+
 

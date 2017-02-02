@@ -18,3 +18,22 @@ databaseChangeLog:
             - column:
                 name: last_name
                 type: varchar(255)
+    - changeSet:
+        id: test-data
+        author: jluck
+        changes:
+        - insert:
+            tableName: registry
+            columns:
+            - column:
+                name: uuid
+                value: 1
+            - column:
+                name: date
+                valueComputed: 'NOW()'
+            - column:
+                name: first_name
+                value: 'Jason'
+            - column:
+                name: last_name
+                value: 'Luck' 
