@@ -19,6 +19,8 @@ services:
     rest-services:
         build:
             context: ./services
+        ports: 
+            - 8080:80
         environment:
             DB_DATABASE: 'app' 
             DB_USER: 'appuser'
