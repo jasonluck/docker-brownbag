@@ -11,7 +11,7 @@ function getGuestRegistry() {
                     $("#registry").find('tbody')
                         .append($('<tr>')
                             .append($('<td>')
-                                .text(guest.date)
+                                .text(guest.time)
                             )
                             .append($('<td>')
                                 .text(guest.firstname)
