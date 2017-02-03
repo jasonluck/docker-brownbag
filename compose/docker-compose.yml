@@ -18,7 +18,7 @@ services:
     rest-services:
         image: rest-services
         ports: 
-            - 80:80
+            - 8080:80
         links:
             - app-db
         depends_on:
@@ -26,6 +26,15 @@ services:
         networks:
             - frontend
             - backend
+
+    web:
+        image: web
+        ports: 
+            - 80:80
+        depends_on:
+            - rest-services
+        networks:
+            - frontend
 networks:
     backend:
         driver: bridge

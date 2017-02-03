@@ -25,4 +25,10 @@ services:
             DB_PASSWORD: 'apppassword'
             DB_HOST: 'app-db'
 
+    web:
+        build:
+            context: ./web
+        volumes: 
+            - ./web/content:/usr/share/nginx/html
+
 
