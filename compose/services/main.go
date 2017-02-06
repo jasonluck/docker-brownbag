@@ -44,7 +44,7 @@ type AllGuestResponse struct {
 
 var version = "1.0.0"
 var dbConfig config
-var timeFormat = "2010-01-02 15:04:00" //"Jan 2, 2006 at 3:04pm (EST)"
+var timeFormat = "2006-01-02 15:04:05"
 
 func getDbConnection() (*sql.DB, error) {
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
