@@ -10,7 +10,10 @@ import (
 
 	"net/http"
 
+	"time"
+
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -26,6 +29,7 @@ type config struct {
 Guest of the docker brownbag
 */
 type Guest struct {
+	ID        string `json:"id"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
 	Date      string `json:"time"`
@@ -40,6 +44,7 @@ type AllGuestResponse struct {
 
 var version = "1.0.0"
 var dbConfig config
+var timeFormat = "2010-01-02 15:04:00" //"Jan 2, 2006 at 3:04pm (EST)"
 
 func getDbConnection() (*sql.DB, error) {
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
@@ -60,7 +65,7 @@ func getGuestList() ([]Guest, error) {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("select date, first_name, last_name from registry")
+	rows, err := db.Query("select uuid, date, first_name, last_name from registry")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,12 +76,14 @@ func getGuestList() ([]Guest, error) {
 		var date string
 		var firstName string
 		var lastName string
+		var uuid string
 
-		err = rows.Scan(&date, &firstName, &lastName)
+		err = rows.Scan(&uuid, &date, &firstName, &lastName)
 		if err != nil {
 			log.Fatal(err)
 		}
 		guest := Guest{
+			ID:        uuid,
 			Date:      date,
 			Firstname: firstName,
 			Lastname:  lastName,
@@ -107,17 +114,28 @@ func getGuestsEndpoint(w http.ResponseWriter, r *http.Request) {
 }
 
 func createGuestEndpoint(w http.ResponseWriter, r *http.Request) {
-	guests, err := getGuestList()
-	response := AllGuestResponse{guests}
-	statusCode := http.StatusOK
+	var guest Guest
+	_ = json.NewDecoder(r.Body).Decode(&guest)
+	guest.Date = time.Now().Format(timeFormat)
+	guest.ID = uuid.New().String()
+
+	db, err := getDbConnection()
 	if err != nil {
 		log.Fatal(err)
-		statusCode = http.StatusInternalServerError
+	}
+	defer db.Close()
+
+	statement, _ := db.Prepare("INSERT INTO registry(uuid, date, first_name, last_name) VALUES(?, ?, ?, ?)")
+	_, err = statement.Exec(guest.ID, guest.Date, guest.Firstname, guest.Lastname)
+	defer statement.Close()
+	if err != nil {
+		log.Println(err)
 	}
 
+	statusCode := http.StatusOK
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
-	data, err := json.MarshalIndent(&response, "", " ")
+	data, err := json.MarshalIndent(&guest, "", " ")
 	if err != nil {
 		log.Println(err)
 	}

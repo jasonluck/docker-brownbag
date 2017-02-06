@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
             - column:
                 name: uuid
-                type: uuid
+                type: varchar(255)
             - column:
                 name: date
                 type: datetime
@@ -27,7 +27,7 @@ databaseChangeLog:
             columns:
             - column:
                 name: uuid
-                value: 1
+                value: '1'
             - column:
                 name: date
                 valueComputed: 'NOW()'
