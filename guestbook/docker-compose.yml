@@ -13,16 +13,12 @@ services:
         image: jluck/brownbag-db
         links:
             - app-db
-        depends_on:
-            - app-db
         networks:
             - backend
 
     rest-services:
         image: jluck/brownbag-guest-service
         links:
-            - app-db
-        depends_on:
             - app-db
         networks:
             - frontend
@@ -37,8 +33,6 @@ services:
         ports: 
             - 80:80
         links:
-            - rest-services
-        depends_on:
             - rest-services
         networks:
             - frontend
