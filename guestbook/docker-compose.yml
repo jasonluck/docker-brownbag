@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+    app-db:
+        image: mysql
+        networks:
+            - backend
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+
+    app-db-schema:
+        image: jluck/brownbag-db
+        links:
+            - app-db
+        depends_on:
+            - app-db
+        networks:
+            - backend
+
+    rest-services:
+        image: jluck/brownbag-guest-service
+        links:
+            - app-db
+        depends_on:
+            - app-db
+        networks:
+            - frontend
+            - backend
+        deploy:
+            mode: replicated
+            replicas: 2
+
+
+    web:
+        image: jluck/brownbag-web
+        ports: 
+            - 80:80
+        links:
+            - rest-services
+        depends_on:
+            - rest-services
+        networks:
+            - frontend
+        deploy:
+            mode: replicated
+            replicas: 3
+        
+networks:
+    backend:
+        driver: bridge
+    frontend:
+        driver: bridge
+
+
