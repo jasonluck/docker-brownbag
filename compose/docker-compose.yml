@@ -5,9 +5,12 @@ services:
         image: mysql
         networks:
             - backend
+        deploy:
+            placement:
+                constraints: [node.role == manager]
 
     app-db-schema:
-        image: dockerbrownbag-schema
+        image: jluck/brownbag-db
         links:
             - app-db
         depends_on:
@@ -16,7 +19,7 @@ services:
             - backend
 
     rest-services:
-        image: rest-services
+        image: jluck/brownbag-guest-service
         links:
             - app-db
         depends_on:
@@ -24,9 +27,13 @@ services:
         networks:
             - frontend
             - backend
+        deploy:
+            mode: replicated
+            replicas: 2
+
 
     web:
-        image: web
+        image: jluck/brownbag-web
         ports: 
             - 80:80
         links:
@@ -35,6 +42,10 @@ services:
             - rest-services
         networks:
             - frontend
+        deploy:
+            mode: replicated
+            replicas: 3
+        
 networks:
     backend:
         driver: bridge
