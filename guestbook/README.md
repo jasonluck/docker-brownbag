@@ -7,6 +7,8 @@ a Nginx web server hosting the application static content, a REST service which 
 ##Getting started
 Download [Docker](https://www.docker.com/products/overview). If you are on Mac or Windows, [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/).
 
+You will also need [Go](https://golang.org/doc/install) installed so you can compile the REST services component of the application.
+
 ## Building the app
 Start by compiling the `go` rest service:
 ```
