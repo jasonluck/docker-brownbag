@@ -1,3 +1,9 @@
+# Hands on with Guestbook app
+The guestbook app is just a simple 3-tier web application stack, which is defined in a [docker-compose.yml](docker-compose.yml) file. It is comprised of
+a Nginx web server hosting the application static content, a REST service which communicates with a MySQL server for data persistence.
+
+![Application Architecture](architecture.png)
+
 ## Building the app
 Start by compiling the `go` rest service:
 ```

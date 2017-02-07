@@ -1,7 +1,7 @@
 # docker-brownbag
 Materials for brown bag presentation on Docker
 
-## Brown Bag Agenda
-* [Intro To Docker](intro)
-* [Docker Compose] (compose.md)
-* [Docker Swarm] (swarm)
+## Docker Brownbag Series
+1. [Intro To Docker](intro)
+2. [Defining your Application Stack] (compose.md)
+3. [Deploying your Application Stack] (swarm)

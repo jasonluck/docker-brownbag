@@ -56,3 +56,13 @@ It also contains a set of network definitions that can we used to segregate cont
 This is all great for your local dev machine, but we probably need different environment configurations
 for CI, Testing or Production environments.
 
+To override or extend information in the `docker-compose.yml` file, you can specify multiple compose files as part of your command line:
+```
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+The second file specified, in this case *docker-compose.prod.yml*, will override values from the first specified compose file.
+By default `docker-compose` will read the `docker-compose.yml`, followed by the `docker-compose.override.yml` in the current directory.
+
+## [Hands on with Guestbook app](guestbook)
+
+
