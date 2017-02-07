@@ -8,7 +8,7 @@ in source control along side your application.
 
 ## Defining your application stack
 A docker-compose.yml file looks like:
-```
+```yml
 version: '2'
 
 services:
@@ -32,8 +32,6 @@ services:
             DB_PASSWORD: 'apppassword'
         links:
             - app-db
-        depends_on:
-            - app-db
         networks:
             - backend
 
@@ -51,6 +49,20 @@ It also contains a set of network definitions that can we used to segregate cont
 * `docker-compose down` - Stops and removes all the containers, networks and volumes associated with your compose file.
 * `docker-compose ps` - Shows all running containers associated to your compose file.
 * `docker-compose logs <service name>` - Shows the logs for the given service.
+
+## Communication between containers
+To allow your containers to communicate with each other, you can create "links" between your containers. Docker turns these links into HOSTS entries in
+the container to allow you to communicate with the linked container by its service name (or its defined alias). For example:
+```yaml
+...
+
+web:
+    links:
+    #[SERVICE:ALIAS]
+    - db:database
+
+...
+```
 
 ## Using Compose in Multiple Environments
 This is all great for your local dev machine, but we probably need different environment configurations
