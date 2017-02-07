@@ -71,12 +71,14 @@ We can start our new container with: `docker run -d -p 80:80 custom-nginx`
 
 For a more complex example we can look at this [Dockerfile](https://github.com/jasonluck/hybris-docker/blob/master/Dockerfile) I created for Hybris
 
-## Important Things to Know About Images
+## Important Things to Know About using Containers
 * Data stored in containers is removed when the container is removed. If you want the data in the container
 to persist past the life of the container, you need to make sure the data is stored in a [Volume](https://docs.docker.com/engine/tutorials/dockervolumes/).
-* The exchange of secrets in a completely secure manner is a real challenge right now. Usually secrets are set as ENV variables
-within the container, which isn't completely secure. A secrets management tool, such as [Vault](https://www.vaultproject.io) is needed to completely
-secure secret data.
+
+* The exchange of secrets in a completely secure manner is a real challenge right now. Older practices stored secrets as `ENV` variables
+within the container, which isn't completely secure. The latest version of Docker (v1.13) has added support for [secure secret storage](https://docs.docker.com/engine/swarm/secrets/) to the swarm engine.
+Using a secrets management tool, such as [Vault](https://www.vaultproject.io) is another great option to completely secure secret data. How secrets are going
+to be consumed by your application is something you need to carefully consider when writing containerized applications.
 
 ## Additional Resources
 * [Brown Bag Presentation - https://github.com/jasonluck/docker-brownbag](https://github.com/jasonluck/docker-brownbag)
