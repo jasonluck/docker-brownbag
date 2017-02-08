@@ -76,5 +76,5 @@ The second file specified, in this case *docker-compose.prod.yml*, will override
 By default `docker-compose` will read the `docker-compose.yml`, followed by the `docker-compose.override.yml` in the current directory.
 
 ## [Hands on with Guestbook app](guestbook)
-
+Demo Time!
 

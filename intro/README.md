@@ -29,6 +29,7 @@ read up on LXE containers.
 your project might require a MySQL database, Redis instance, or AEM Server.
 * You can be sure that your code will run in any environment, because the runtime configuration and dependencies are controlled
 in the container.
+* Have multiple installations of application stacks for different projects. All while keeping your local machine clean.
 
 ### Production Use Cases
 * Provides configuration management for server that can be easily managed in source control.
