@@ -33,4 +33,10 @@ services:
         volumes: 
             - ./web/content:/usr/share/nginx/html
 
+networks:
+    backend:
+        driver: bridge
+    frontend:
+        driver: bridge
+
 
