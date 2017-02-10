@@ -15,7 +15,7 @@ services:
                 constraints: [node.role == manager]
 
     app-db-schema:
-        image: jluck/brownbag-db
+        image: jluck/brownbag-db:1.0
         environment:
             DB_DATABASE: 'app' 
             DB_USER: 'appuser'
@@ -29,7 +29,7 @@ services:
                 condition: 'none'
 
     rest-services:
-        image: jluck/brownbag-guest-service
+        image: jluck/brownbag-guest-service:1.0
         environment:
             DB_DATABASE: 'app' 
             DB_USER: 'appuser'
@@ -48,7 +48,7 @@ services:
 
 
     web:
-        image: jluck/brownbag-web
+        image: jluck/brownbag-web:1.0
         ports: 
             - 80:80
         links:

@@ -1,4 +1,4 @@
-# Docker Brownbag - Docker Compose
+# Docker Brownbag - Defining your Application Stack
 Docker Compose is a tool for defining and running multi-container applications. Inside a single file your define
 all your application components and the application services they rely on. Then using a single command, you 
 can create, start and stop all those services.
@@ -9,7 +9,7 @@ in source control along side your application.
 ## Defining your application stack
 A docker-compose.yml file looks like:
 ```yml
-version: '2'
+version: '3'
 
 services:
     app-db:
