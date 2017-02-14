@@ -49,6 +49,13 @@ Swarm mode has an internal DNS component that automatically assigns each service
 ## Monitoring Containers
 
 ### Logging
+The `docker logs` command shows the command's output as it would appear if you ran it from the command line. On UNIX/Linux this means any output to
+STDOUT and STDERR. In some cases however the ouput of the `docker logs` command my not be helpful:
+* If your containers process logs information to a log file instead of STDOUT or STDERR.
+* If you use a logging driver that sends logs to a file or a remote system/service.
+
+Docker offer a large number of logging drivers that can be configured for your container. A complete list of supported drivers are available [here](https://docs.docker.com/engine/admin/logging/overview/),
+but some examples include __syslog__, __AWS Cloudwatch Logs__, __LogStash__, and __Google Cloud Platform Logging__.
 
 ### Health Checks
 
