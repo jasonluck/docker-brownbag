@@ -23,3 +23,18 @@ After configuring our client to talk to the swarm, to deploy our app to the swar
 ```
 docker stack deploy -c docker-compose.yml guestbook
 ```
+
+### Rolling Update
+Monitor the services status
+```
+curl -s -L -o /dev/null -w "%{http_code}\n" http://192.168.99.100/services
+```
+
+Apply the Update
+```
+docker service update \
+     --update-parallelism 1 \
+     --update-delay 30s \
+     --image jluck/brownbag-guest-service:1.0.1 \
+     guestbook_rest-services
+```
