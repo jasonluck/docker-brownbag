@@ -29,7 +29,7 @@ services:
                 condition: 'none'
 
     rest-services:
-        image: jluck/brownbag-guest-service:1.0
+        image: jluck/brownbag-guest-service:1.0.1
         environment:
             DB_DATABASE: 'app' 
             DB_USER: 'appuser'

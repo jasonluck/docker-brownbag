@@ -42,7 +42,7 @@ type AllGuestResponse struct {
 	Guest []Guest `json:"guest"`
 }
 
-var version = "1.0.0"
+var version = "1.0.1"
 var dbConfig config
 var timeFormat = "2006-01-02 15:04:05"
 
@@ -142,6 +142,27 @@ func createGuestEndpoint(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func versionEndpoint(w http.ResponseWriter, r *http.Request) {
+	statusCode := http.StatusOK
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	w.Write([]byte(fmt.Sprintf("{version: '%s'}", version)))
+}
+
+func healthzEndpoint(w http.ResponseWriter, r *http.Request) {
+	statusCode := http.StatusOK
+
+	db, err := getDbConnection()
+	if err != nil {
+		statusCode = http.StatusInternalServerError
+	}
+	defer db.Close()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	w.Write([]byte("{status: 'healthy'}"))
+}
+
 func main() {
 	log.Println("Starting app...")
 
@@ -173,6 +194,8 @@ func main() {
 	}
 
 	router := mux.NewRouter()
+	router.HandleFunc("/version", versionEndpoint).Methods("GET")
+	router.HandleFunc("/healthz", healthzEndpoint).Methods("GET")
 	router.HandleFunc("/guest", getGuestsEndpoint).Methods("GET")
 	router.HandleFunc("/guest", createGuestEndpoint).Methods("POST")
 

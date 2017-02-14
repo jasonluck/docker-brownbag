@@ -5,3 +5,5 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 #Load our application static content
 COPY content /usr/share/nginx/html
+
+HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost || exit 1
