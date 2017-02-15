@@ -9,7 +9,8 @@ containers to that supports dynamic-service discovery, load balancing, scaling a
 ### Nodes 
 Swarms are comprised of multiple __nodes__. A node is an instance of the Docker engine wich participates in the swarm. Nodes can have one of two roles:
 * `Manager node` - Managers perform the orchestration and cluster management for the swarm. __Service definitions__ are submitted to a manager node. The manager node
-then dispatches __tasks__ to the worker nodes.
+then dispatches __tasks__ to the worker nodes. Manager nodes store the state of the swarm and replicate this state between manager nodes
+using a [Raft Consensus](http://thesecretlivesofdata.com/raft/) algorithm.
 * `Worker node` - Workers execute __tasks__ dispatched to it from Manager nodes. The worker communicates the state of those tasks back to the manager.
 
 ### Services and tasks
@@ -39,6 +40,31 @@ Swarm mode has an internal DNS component that automatically assigns each service
  to distribute requests among services within the cluster based upon the DNS name of the service.
 
 ## Create a swarm
+To create a swarm, you first need to create our first manager node. If you are not using docker-machine to create your nodes, then you will
+need to supply the IP address of your manager node.
+```bash
+export MANAGER_IP="$(docker-machine ip swarm-manager1)"
+docker swarm init --advertise-addr $MANAGER_IP
+```
+
+When the swarm is initialized, a swarm token will be created and displayed in the output of the command. This token is used to join nodes to the swarm.
+```
+To add a worker to this swarm, run the following command:
+
+    docker swarm join \
+    --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \
+    $MANAGER_IP:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+```
+
+To see all the nodes in our swarm we can run the `docker node ls` command:
+```
+$ docker node ls
+
+ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
+dxn1zf6l61qsb1josjja83ngz *  manager1  Ready   Active        Leader
+```
 
 ## Application Deployment
 
