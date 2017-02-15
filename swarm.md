@@ -58,6 +58,24 @@ Docker offer a large number of logging drivers that can be configured for your c
 but some examples include __syslog__, __AWS Cloudwatch Logs__, __LogStash__, and __Google Cloud Platform Logging__.
 
 ### Health Checks
+New with Docker 1.12 is the ability to add a health check into your container. This allows docker to query the health of your containerized application.
+If your container doesn't have a healthcheck configured, you can configure one in the service definition. After the health check fails more than the
+defined number of retries, the container is considered to be failed and the container will be stopped and a new container started.
+
+__Health Check added to Container Image__
+```Dockerfile
+HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost/healthz || exit 1
+```
+
+__Health Check defined in Service Definition__
+```bash
+docker run -d \
+  --health-cmd='url --fail http://localhost || exit 1' \
+  --health-interval=30s \
+  --health-timeout=10s \
+  --health-retries=2 \
+  nginix
+```
 
 ## Volumes and Data Backup
 
