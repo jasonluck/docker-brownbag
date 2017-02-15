@@ -27,7 +27,9 @@ docker stack deploy -c docker-compose.yml guestbook
 ### Rolling Update
 Monitor the services status
 ```
-curl -s -L -o /dev/null -w "%{http_code}\n" http://192.168.99.100/services
+while (true) do \
+    curl -s -L -w ":%{http_code}\n" http://192.168.99.100/services/version;
+done
 ```
 
 Apply the Update
