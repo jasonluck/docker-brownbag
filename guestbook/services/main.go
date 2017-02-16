@@ -12,6 +12,10 @@ import (
 
 	"time"
 
+	"io/ioutil"
+
+	"strings"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -61,13 +65,13 @@ func getDbConnection() (*sql.DB, error) {
 func getGuestList() ([]Guest, error) {
 	db, err := getDbConnection()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	defer db.Close()
 
 	rows, err := db.Query("select uuid, date, first_name, last_name from registry")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	defer rows.Close()
 
@@ -80,7 +84,7 @@ func getGuestList() ([]Guest, error) {
 
 		err = rows.Scan(&uuid, &date, &firstName, &lastName)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		guest := Guest{
 			ID:        uuid,
@@ -100,7 +104,7 @@ func getGuestsEndpoint(w http.ResponseWriter, r *http.Request) {
 	response := AllGuestResponse{guests}
 	statusCode := http.StatusOK
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		statusCode = http.StatusInternalServerError
 	}
 
@@ -121,7 +125,7 @@ func createGuestEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	db, err := getDbConnection()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	defer db.Close()
 
@@ -155,6 +159,7 @@ func healthzEndpoint(w http.ResponseWriter, r *http.Request) {
 	db, err := getDbConnection()
 	if err != nil {
 		statusCode = http.StatusInternalServerError
+		log.Printf("Health Check failed: %s\n", err)
 	}
 	defer db.Close()
 
@@ -175,11 +180,23 @@ func main() {
 	dbPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	dbUsername := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
+	dbPasswordFile := os.Getenv("DB_PASSWORD_FILE")
 	dbName := os.Getenv("DB_DATABASE")
 
 	hostname, err := os.Hostname()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if dbPasswordFile != "" {
+		log.Printf("DB_PASSWORD_FILE specified. Reading password from %s", dbPasswordFile)
+		fileData, err := ioutil.ReadFile(dbPasswordFile)
+		if err != nil {
+			log.Fatalf("Could not read database password form %s: %s", dbPasswordFile, err)
+		}
+		dbPassword = string(fileData)
+		//Trim trailing newline character
+		dbPassword = strings.TrimRight(dbPassword, "\n")
 	}
 
 	dbConfig = config{
