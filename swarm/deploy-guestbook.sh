@@ -13,13 +13,13 @@ openssl rand -base64 64 | docker secret create mysql_app_password -
 docker secret ls
 
 #Create our networks
-docker network create -d overlay guestbook_backend;
-docker network create -d overlay guestbook_frontend
+docker network create -d overlay backend
+docker network create -d overlay frontend
 
 #Deploy MySQL DB
 docker service create \
-    --name guestbook_app-db \
-    --network guestbook_backend \
+    --name app-db \
+    --network backend \
     --secret mysql_root_password \
     --secret mysql_app_password \
     --env MYSQL_DATABASE=app \
@@ -32,10 +32,10 @@ docker service create \
 
 #Deploy our app schema
 docker service create \
-    --name guestbook_app-db-schema \
-    --network guestbook_backend \
+    --name app-db-schema \
+    --network backend \
     --secret mysql_app_password \
-    --env DB_HOST=guestbook_app-db \
+    --env DB_HOST=app-db \
     --env DB_DATABASE=app \
     --env DB_USER=appuser \
     --env DB_PASSWORD_FILE=/run/secrets/mysql_app_password \
@@ -46,12 +46,11 @@ docker service create \
 
 #Deploy our rest services
 docker service create \
-    --name guestbook_guest-service \
-    --hostname rest-services \
-    --network guestbook_backend \
-    --network guestbook_frontend \
+    --name rest-services \
+    --network backend\
+    --network frontend \
     --secret mysql_app_password \
-    --env DB_HOST=guestbook_app-db \
+    --env DB_HOST=app-db \
     --env DB_DATABASE=app \
     --env DB_USER=appuser \
     --env DB_PASSWORD_FILE=/run/secrets/mysql_app_password \
@@ -63,3 +62,16 @@ docker service create \
     --label app.stack=guestbook \
     -p 8081:80 \
     jluck/brownbag-guest-service:1.0.1
+
+#Deploy our web server
+docker service create \
+    --name web \
+    --network frontend \
+    --constraint 'node.role == worker' \
+    --replicas 3 \
+    --update-parallelism 1 \
+    --update-delay 2m \
+    --update-monitor 1m  \
+    --label app.stack=guestbook \
+    -p 80:80 \
+    jluck/brownbag-web:1.0
