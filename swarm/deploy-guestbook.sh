@@ -9,9 +9,6 @@ openssl rand -base64 64 | docker secret create mysql_root_password -
 #Create MySQL App Passsword, available to containers at /run/secrets/mysql_app_password
 openssl rand -base64 64 | docker secret create mysql_app_password -
 
-#Show all our secrets
-docker secret ls
-
 #Create our networks
 docker network create -d overlay backend
 docker network create -d overlay frontend
@@ -75,3 +72,9 @@ docker service create \
     --label app.stack=guestbook \
     -p 80:80 \
     jluck/brownbag-web:1.0
+
+#Show all our secrets
+docker secret ls
+
+#Print out all our services
+docker service ls
