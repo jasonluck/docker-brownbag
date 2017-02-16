@@ -13,30 +13,22 @@ To create our swarm run:
 ```
 
 ### Deploy our application stack
-Configure our docker client to talk to the swarm manager by running:
-```
-docker-machine env swarm-manager1;
-eval $(docker-machine env swarm-manager1)
-```
-
-After configuring our client to talk to the swarm, to deploy our app to the swarm run:
-```
-docker stack deploy -c docker-compose.yml guestbook
+To create our application we need to create our set of secrets, setup our networks and define our services. I have placed all those commands
+into the [deploy-guestbook.sh](deploy-guestbook.sh) script. So to deploy our app, all we need to run is:
+```bash
+./deploy-guestbook.sh
 ```
 
 ### Rolling Update
 Monitor the services status
-```
+```bash
 while (true) do \
-    curl -s -L -w ":%{http_code}\n" http://192.168.99.100/services/version;
+    curl -s -L -w ":%{http_code}\n" http://192.168.99.100:8081/version;
+    sleep 1;
 done
 ```
 
-Apply the Update
-```
-docker service update \
-     --update-parallelism 1 \
-     --update-delay 30s \
-     --image jluck/brownbag-guest-service:1.0.1 \
-     guestbook_rest-services
+Apply the update to a newer version of the container image
+```bash
+docker service update --image jluck/brownbag-guest-service:1.0.2 rest-services
 ```

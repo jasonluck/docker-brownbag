@@ -72,6 +72,8 @@ dxn1zf6l61qsb1josjja83ngz *  manager1  Ready   Active        Leader
 
 ## Security
 
+### Secrets
+
 ## Monitoring Containers
 
 ### Logging
@@ -106,3 +108,4 @@ docker run -d \
 ## Volumes and Data Backup
 
 ## Demo
+[Begin the demo](swarm)

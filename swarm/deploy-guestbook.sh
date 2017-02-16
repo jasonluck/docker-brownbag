@@ -54,8 +54,8 @@ docker service create \
     --constraint 'node.role == worker' \
     --replicas 2 \
     --update-parallelism 1 \
-    --update-delay 2m \
-    --update-monitor 1m  \
+    --update-delay 1m \
+    --update-monitor 20s  \
     --label app.stack=guestbook \
     -p 8081:80 \
     jluck/brownbag-guest-service:1.0.1
@@ -67,8 +67,8 @@ docker service create \
     --constraint 'node.role == worker' \
     --replicas 3 \
     --update-parallelism 1 \
-    --update-delay 2m \
-    --update-monitor 1m  \
+    --update-delay 1m \
+    --update-monitor 20s  \
     --label app.stack=guestbook \
     -p 80:80 \
     jluck/brownbag-web:1.0
