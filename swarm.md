@@ -67,6 +67,33 @@ dxn1zf6l61qsb1josjja83ngz *  manager1  Ready   Active        Leader
 ```
 
 ## Application Deployment
+Docker has two methods of application deployment at this point. Ideally you can use your `docker-compose.yml` file as your deployment definition and use
+the `docker stack deploy -c <compose-file> <stack name>` command to deploy your applicaiton stack to the swarm. This is by far the easiest deployment
+method and allows you to reduce deployment error by using the same docker-compose file that your developers use. It also keeps application stack
+definition all in one place.
+
+Where this method falls short is that it does not yet support the following critical features you are probably going to want
+ in your production deployment:
+* Secrets
+
+For those of us who want to use secrets, we will need to deploy individual service definitions. Here is an example from our guestbook app:
+```bash
+docker service create \
+    --name rest-services \
+    --network backend\
+    --network frontend \
+    --secret mysql_app_password \
+    --env DB_HOST=app-db \
+    --env DB_DATABASE=app \
+    --env DB_USER=appuser \
+    --env DB_PASSWORD_FILE=/run/secrets/mysql_app_password \
+    --constraint 'node.role == worker' \
+    --replicas 2 \
+    --update-parallelism 1 \
+    --update-delay 1m \
+    --update-monitor 20s  \
+    jluck/brownbag-guest-service:1.0.1
+```
 
 ### Rolling Update
 
