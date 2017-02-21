@@ -73,6 +73,11 @@ We can start our new container with: `docker run -d -p 80:80 custom-nginx`
 For a more complex example we can look at this [Dockerfile](https://github.com/jasonluck/hybris-docker/blob/master/Dockerfile) I created for Hybris
 
 ## Important Things to Know About using Containers
+* Start up order and timing is very important when your container relys on other services. You can use the _depends_on_ configuration to tell Docker which 
+other services your container depends on, but that won't completely solve the problem. Because the container is considered "started" once the container CMD
+is executed. If the service running in container takes time to completely become available, then the service maybe still not be ready by the time your other
+container starts and tries to use the service.
+
 * Data stored in containers is removed when the container is removed. If you want the data in the container
 to persist past the life of the container, you need to make sure the data is stored in a [Volume](https://docs.docker.com/engine/tutorials/dockervolumes/).
 
