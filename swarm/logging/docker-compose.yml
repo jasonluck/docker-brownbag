@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+    elasticsearch:
+        image: elasticsearch:alpine
+        ports:
+            - 9200:9200
+        networks: 
+            - logging
+        healthcheck:
+            test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:9200/_cat/health"]
+            timeout: 5s
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+
+    logstash:
+        image: jluck/brownbag-logging
+        command: "-f /config/logstash.conf"
+        networks: 
+            - logging
+        depends_on:
+            - elasticsearch
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+
+    kibana:
+        image: kibana
+        ports: 
+            - 5601:5601
+        networks: 
+            - logging
+        depends_on: 
+            - elasticsearch
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+
+networks: 
+    logging:
+        driver: overlay
+
+

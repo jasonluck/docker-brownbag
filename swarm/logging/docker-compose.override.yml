@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    logstash:
+        build:
+            context: ./logstash
+
+networks: 
+    logging:
+        driver: bridge
