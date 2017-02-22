@@ -1,6 +1,10 @@
 #Create 3 nodes for our swarm. One manager and two workers.
-docker-machine create --driver virtualbox swarm-manager1
-docker-machine create --driver virtualbox swarm-manager2
+docker-machine create --driver virtualbox \
+  --virtualbox-memory 2048 \
+  swarm-manager1
+docker-machine create --driver virtualbox \
+  --virtualbox-memory 2048 \
+  swarm-manager2
 docker-machine create --driver virtualbox swarm-node1
 docker-machine create --driver virtualbox swarm-node2
 docker-machine create --driver virtualbox swarm-node3

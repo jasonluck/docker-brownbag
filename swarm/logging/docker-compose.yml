@@ -18,13 +18,14 @@ services:
     logstash:
         image: jluck/brownbag-logging
         command: "-f /config/logstash.conf"
+        ports:
+            - "12201/udp:12201/udp"
         networks: 
             - logging
         depends_on:
             - elasticsearch
         deploy:
-            placement:
-                constraints: [node.role == manager]
+            mode: global
 
     kibana:
         image: kibana
