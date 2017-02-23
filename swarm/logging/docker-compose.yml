@@ -13,13 +13,16 @@ services:
             timeout: 5s
         deploy:
             placement:
-                constraints: [node.role == manager]
+                constraints: [node.hostname == swarm-manager2]
+            resources:
+                reservations:
+                    memory: 1536m
 
     logstash:
         image: jluck/brownbag-logging
         command: "-f /config/logstash.conf"
         ports:
-            - "12201/udp:12201/udp"
+            - "12201:12201/udp"
         networks: 
             - logging
         depends_on:
@@ -37,7 +40,7 @@ services:
             - elasticsearch
         deploy:
             placement:
-                constraints: [node.role == manager]
+                constraints: [node.hostname == swarm-manager2]
 
 networks: 
     logging:
