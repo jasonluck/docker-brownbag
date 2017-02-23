@@ -4,8 +4,6 @@ services:
 
     elasticsearch:
         image: elasticsearch:alpine
-        ports:
-            - 9200:9200
         networks: 
             - logging
         healthcheck:
