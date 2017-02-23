@@ -100,6 +100,14 @@ docker service create \
 ## Security
 
 ### Secrets
+In order to properly secure our containerized applications we need a way to supply protected data to them such as passwords, encryption keys, or certificates.
+The ability to store "secrets" in the swarm. Theses secrets are encrypted at rest and during transmission to nodes/containers. Additionally secrets are only accessable
+by containers who have been granted explicit access.
+
+Secrets are made available to containers as a file located at `/run/secrets/<secret name>`. This means when writing custom applications you need to make sure
+that your application can load needed secret information from a configurable filepath.
+
+_Secrets support is still very new in Docker and does not yet work properly when defining secrets in docker-compose.yml files._
 
 ## Monitoring Containers
 
