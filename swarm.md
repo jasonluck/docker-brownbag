@@ -99,6 +99,13 @@ docker service create \
 
 ## Security
 
+* Linux namespaces prevent containers from seeing or affecting processes running in other containers or on the host.
+* Linux cgroups limit resource (cpu, memory, disk, etc) usage by containers so that a rogue container can't resource starve the system.
+* Docker images can digitally signed to make sure images you used come from a trusted authority.
+* (AppArmor)[http://wiki.apparmor.net/index.php/Documentation] or Seccomp security profiles can be applied to containers to secure them.
+* Docker client communications with the Docker Daemon can be secured via two-way SSL.
+* Communications between Docker Daemons and Registries can be secured via two-way SSL as well.
+
 ### Secrets
 In order to properly secure our containerized applications we need a way to supply protected data to them such as passwords, encryption keys, or certificates.
 The ability to store "secrets" in the swarm. Theses secrets are encrypted at rest and during transmission to nodes/containers. Additionally secrets are only accessable
