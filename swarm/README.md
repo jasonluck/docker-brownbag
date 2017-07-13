@@ -35,17 +35,17 @@ docker service update --image jluck/brownbag-guest-service:1.0.2 rest-services
 
 
 ### Centralize Logging
-Deploy our ELK stack to the swarm. Logstash runs on each node to capture logging and forward to ElasticSearch.
+Deploy our ELK stack to the swarm. FileBeat runs on each node to capture logging and forward to LogStash and eventually ElasticSearch.
 
 ```bash
 docker stack deploy -c logging/docker-compose.yml logging
 ```
 
-Rolling update to all our containers to change thier logging setup to send logs to LogStash
+Rolling update to all our containers to change thier logging setup to send logs to FileBeat
 ```bash
 for SERVICE in $(docker service ls --filter "label=app.stack=guestbook" -q)
 do
-    docker service update --log-driver gelf --log-opt gelf-address=udp://localhost:12201 $SERVICE
+    docker service update --log-driver json-file --log-opt max-size=10m $SERVICE
 done
 ```
 

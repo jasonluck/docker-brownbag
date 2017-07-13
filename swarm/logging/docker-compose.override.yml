@@ -1,6 +1,9 @@
 version: '3'
 
 services:
+    filebeat:
+        build:
+            context: ./filebeat
     logstash:
         build:
             context: ./logstash

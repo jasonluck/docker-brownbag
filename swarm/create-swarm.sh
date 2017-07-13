@@ -23,6 +23,9 @@ docker-machine ssh swarm-node1 "docker swarm join --token $WORKER_TOKEN $MANAGER
 docker-machine ssh swarm-node2 "docker swarm join --token $WORKER_TOKEN $MANAGER_IP:2377"
 docker-machine ssh swarm-node3 "docker swarm join --token $WORKER_TOKEN $MANAGER_IP:2377"
 
+#Prep node for ElasticSearch
+docker-machine ssh swarm-manager2 "sudo sysctl -w vm.max_map_count=262144"
+
 #Connect to the swarm manager
 eval $(docker-machine env swarm-manager1)
 
@@ -32,7 +35,7 @@ docker service create \
   --publish=8080:8080/tcp \
   --constraint=node.role==manager \
   --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
-  manomarks/visualizer
+  dockersamples/visualizer
 
 #Show our swarm nodes
 docker-machine ssh swarm-manager1 "docker node ls"

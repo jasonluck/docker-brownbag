@@ -1,0 +1,11 @@
+path.data: /var/lib/beats
+
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /dockerlogs/*/*-json.log
+  document_type: docker
+  json.message_key: log
+
+output.logstash:
+  hosts: ["logstash:5044"]

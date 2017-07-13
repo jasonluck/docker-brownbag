@@ -2,13 +2,14 @@ version: '3'
 
 services:
 
+    #https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
     elasticsearch:
-        image: elasticsearch:alpine
+        image: docker.elastic.co/elasticsearch/elasticsearch:5.5.0
         networks: 
             - logging
-        healthcheck:
-            test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:9200/_cat/health"]
-            timeout: 5s
+        #healthcheck:
+            #test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:9200/_cat/health"]
+            #timeout: 5s
         deploy:
             placement:
                 constraints: [node.hostname == swarm-manager2]
@@ -16,20 +17,29 @@ services:
                 reservations:
                     memory: 1536m
 
+    filebeat:
+        image: jluck/brownbag-filebeat
+        volumes:
+            - "/var/lib/docker/containers:/dockerlogs:ro"
+        networks: 
+            - logging
+        depends_on:
+            - logstash
+        deploy:
+            mode: global
+    
     logstash:
         image: jluck/brownbag-logging
-        command: "-f /config/logstash.conf"
-        ports:
-            - "12201:12201/udp"
         networks: 
             - logging
         depends_on:
             - elasticsearch
         deploy:
-            mode: global
+            placement:
+                constraints: [node.role == worker]
 
     kibana:
-        image: kibana
+        image: docker.elastic.co/kibana/kibana:5.5.0
         ports: 
             - 5601:5601
         networks: 
@@ -38,7 +48,7 @@ services:
             - elasticsearch
         deploy:
             placement:
-                constraints: [node.hostname == swarm-manager2]
+                constraints: [node.role == worker]
 
 networks: 
     logging:
